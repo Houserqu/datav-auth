@@ -5,7 +5,9 @@
   "private": true,
   "egg": {
     "typescript": true,
-    "require": ["egg-ts-helper/register"]
+    "require": [
+      "egg-ts-helper/register"
+    ]
   },
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-datav-auth",
@@ -23,7 +25,9 @@
   },
   "dependencies": {
     "egg": "^2.6.1",
-    "egg-scripts": "^2.6.0"
+    "egg-mysql": "^3.0.0",
+    "egg-scripts": "^2.6.0",
+    "egg-validate": "^2.0.2"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.40",
@@ -50,7 +54,9 @@
     "type": "git",
     "url": ""
   },
-  "eslintIgnore": ["coverage"],
+  "eslintIgnore": [
+    "coverage"
+  ],
   "author": "houserqu",
   "license": "MIT"
 }

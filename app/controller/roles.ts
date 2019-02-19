@@ -1,4 +1,4 @@
-import { createRoleObj } from './../model/role';
+import { createRoleObj } from '../service/roles';
 import { Controller } from 'egg';
 
 export default class RoleController extends Controller {
@@ -34,12 +34,11 @@ export default class RoleController extends Controller {
       code: request.body.code
     }
 
-    const res = await service.roles.createRole(newRole);
-
-    if (res.affectedRows > 0) {
-      helper.resSuccess(res.insertId);
-    } else {
-      helper.resError('创建失败')
+    try{
+      const id = await service.roles.createRole(newRole);
+      helper.resSuccess(id);
+    } catch(e) {
+      helper.resError(e.message)
     }
   }
 
@@ -62,12 +61,38 @@ export default class RoleController extends Controller {
     let updateRole: createRoleObj = request.body;
     updateRole.id = parseInt(params.id);
 
-    const res = await service.roles.updateRole(updateRole);
+    try{
+      const id = await service.roles.updateRole(updateRole);
+      helper.resSuccess(id);
+    } catch(e) {
+      helper.resError(e.message)
+    }
+  }
 
-    if (res.affectedRows > 0) {
+  // 获取角色权限
+  public async rolePermissions() {
+    const { ctx: { helper, service, params } } = this;
+
+    try{
+      const permissions = await service.roles.getRolePermissions(params.id);
+      helper.resSuccess(permissions.map(v => v.code));
+    } catch(e) {
+      helper.resError(e.message)
+    }
+  }
+
+  // 更新角色权限
+  public async updateRolePermissions() {
+    const { ctx: { helper, service, params, request } } = this;
+
+    try{
+      await service.roles.updateRolePermissions({
+        role_id: params.id, 
+        permission_ids: request.body.permission_ids 
+      });
       helper.resSuccess(params.id);
-    } else {
-      helper.resError('更新失败')
+    } catch(e) {
+      helper.resError(e.message)
     }
   }
 }

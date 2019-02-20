@@ -10,6 +10,9 @@ export default (appInfo: EggAppInfo) => {
   // add your egg config in here
   config.middleware = [];
 
+  // 请求头中用户 id 键
+  config.userIdHeaderKey = 'certificate-userid';
+
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,

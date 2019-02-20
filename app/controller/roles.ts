@@ -1,12 +1,13 @@
 import { createRoleObj } from '../service/roles';
 import { Controller } from 'egg';
+import auth from '../extend/auth'
 
 export default class RoleController extends Controller {
   // 资源列表
+  @auth('ROLE_LIST')
   public async index() {
     const { ctx: { helper, service, query } } = this;
     const res = await service.roles.getRolesList(parseInt(query.pageSize), parseInt(query.page || 1));
-
     if (res) {
       helper.resSuccess(res);
     } else {

@@ -83,6 +83,19 @@ export default class Roles extends Service {
     }
   }
 
+  // 获取用户权限
+  public async getUserPermissions(userId: number): Promise<createRoleObj[]> {
+    // 获取角色的权限 ids
+    const relation = await this.app.mysql.get('user-role', { user_id: userId })
+    console.log(relation)
+
+    if(relation) {
+      return this.getRolePermissions(relation.role_id)
+    } else {
+      return []
+    }
+  }
+
   // 更新角色权限
   public async updateRolePermissions(rolePermission: RolePermission) {
     return await this.app.mysql.update('role_permission', rolePermission, {

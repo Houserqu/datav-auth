@@ -10,12 +10,17 @@ export default function auth (auth) {
       if(!config.userIdHeaderKey) {
         throw new Error('未配置 userid 在请求 header 中的 key')
       } else {
-        // 数据库查询用户权限
-        const result = await service.roles.getRolePermissions(headers['certificate-userid'])
-        const permissions = result.map(v => v.code)
+        if(headers['certificate-userid']) {
+          // 数据库查询用户权限
+          const result = await service.roles.getUserPermissions(headers['certificate-userid'])
+          const permissions = result.map(v => v.code)
 
-        if (permissions.indexOf(auth) === -1) {
-          helper.resError('无权限')
+          if (permissions.indexOf(auth) === -1) {
+            helper.resError('无权限')
+            return 
+          }
+        } else {
+          helper.resError('获取 userid 失败')
           return 
         }
       }
